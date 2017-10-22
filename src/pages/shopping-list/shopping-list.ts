@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { ShoppingItem } from '../../models/shopping-item.interface';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database-deprecated';
+
 /**
  * Generated class for the ShoppingListPage page.
  *
@@ -15,7 +18,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ShoppingListPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  shoppingListRef$: FirebaseListObservable<ShoppingItem[]>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private database: AngularFireDatabase) {
+    this.shoppingListRef$ = this.database.list('shopping-list');
   }
 
   navigateToAddShoppingPage() {
