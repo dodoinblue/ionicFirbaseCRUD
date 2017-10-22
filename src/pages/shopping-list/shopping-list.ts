@@ -39,7 +39,11 @@ export class ShoppingListPage {
       buttons: [
         {
           text: 'Edit',
-          handler: () => {}
+          handler: () => {
+            this.navCtrl.push('EditShoppingItemPage', {
+              shoppingItemId: shoppingItem.$key
+            })
+          }
         },
         {
           text: 'Delete',
