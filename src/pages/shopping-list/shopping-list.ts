@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 
 import { ShoppingItem } from '../../models/shopping-item.interface';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database-deprecated';
@@ -21,12 +21,40 @@ export class ShoppingListPage {
   shoppingListRef$: FirebaseListObservable<ShoppingItem[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private database: AngularFireDatabase) {
+              private database: AngularFireDatabase,
+              private actionSheetCtrl: ActionSheetController) {
     this.shoppingListRef$ = this.database.list('shopping-list');
   }
 
   navigateToAddShoppingPage() {
     this.navCtrl.push('AddShoppingPage');
+  }
+
+  selectShoppingItem(shoppingItem: ShoppingItem) {
+    console.log("clicked");
+    console.log(shoppingItem);
+
+    this.actionSheetCtrl.create({
+      title: `${shoppingItem.itemName}`,
+      buttons: [
+        {
+          text: 'Edit',
+          handler: () => {}
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.shoppingListRef$.remove(shoppingItem.$key);
+          }
+        },
+        {
+          text: 'Cancel',
+          handler: () => {
+            console.log('Cancelled');
+          }
+        }
+      ]
+    }).present();
   }
 
 }
